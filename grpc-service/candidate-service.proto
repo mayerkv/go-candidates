@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option go_package = "github.com/mayerkv/go-candidates/grpc-service;grpc_service";
+
+service CandidatesService {
+  rpc CreateCandidate(CreateCandidateRequest) returns (CreateCandidateResponse) {}
+  rpc GetCandidate(GetCandidateRequest) returns (GetCandidateResponse) {}
+  rpc SearchCandidates(SearchCandidatesRequest) returns (SearchCandidatesResponse) {}
+}
+
+message CreateCandidateRequest {
+  string name = 1;
+  string surname = 2;
+  repeated Contact contacts = 3;
+}
+
+message CreateCandidateResponse {
+  string id = 1;
+}
+
+message GetCandidateRequest {
+  string id = 1;
+}
+
+message GetCandidateResponse {
+  Candidate candidate = 1;
+}
+
+message SearchCandidatesRequest {
+  int32 page = 1;
+  int32 size = 2;
+  Candidate.Order orderBy = 3;
+  OrderDirection orderDirection = 4;
+}
+
+message SearchCandidatesResponse {
+  repeated Candidate list = 1;
+  int32 count = 2;
+}
+
+message Contact {
+  enum Type {
+    PHONE = 0;
+    EMAIL = 1;
+  }
+  Type type = 1;
+  string value = 2;
+}
+
+message Candidate {
+  string id = 1;
+  string name = 2;
+  string surname = 3;
+  repeated Contact contacts = 4;
+
+  enum Order {
+    FULL_NAME = 0;
+  }
+}
+
+enum OrderDirection {
+  ASC = 0;
+  DESC = 1;
+}
